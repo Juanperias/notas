@@ -6,7 +6,7 @@ Hace un tiempo me puse a trabajar en mi propio Assembly, y aprendí algunas cosa
 
 ## Instrucciones.. pero vistas desde el binario
 
-Esta primera parte es una especie de adopción de como se ven el código máquina, a la final el Assembly es una abstracción que toma un código Assembly y lo convierte a código máquina de la arquitectura dada, la mayoría ya debe saber incluso sin estar muy metido en el mundo del low level es que las computadoras usan el código binario, y cuando vemos una instruccion como por ejemplo:
+Esta primera parte es una especie de adopción de como se ven el código máquina, a la final el Assembler es una abstracción que toma un código Assembly y lo convierte a código máquina de la arquitectura dada, la mayoría ya debe saber incluso sin estar muy metido en el mundo del low level es que las computadoras usan el código binario, y cuando vemos una instruccion como por ejemplo:
 ```
 addi a0, zero, 10
 ```
