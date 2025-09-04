@@ -47,7 +47,60 @@ Si quieres pasar de negativo a positivo, puedes usar el mismo método, pero con 
 
 Ahora con esto sería capaz de codificar la instrucción addi con inmediato negativo usando el método de complemento a dos (que como dato curioso es usado en la mayoría de arquitecturas modernas como x86_64, arm, etc.).
 
-# todo: pseudo instrucciones
+## Pseudo instrucciones
+Según la rae pseudo significa falso, así que serían instrucciones falsas, y tiene sentido. En esta sección explicaré cómo son las pseudo instrucciones y cómo se "codifican" (aunque realmente no se codifican como las demás).
+
+Tomemos por ejemplo la instrucción `nop`, aunque busques por todos los lados sus opcodes no te saldrá nada te saldrá `addi x0, x0, 0` y si codificas eso en objdump por ejemplo te saldrá nop, para no meter más relleno una pseudo instrucción es una especie de ayuda para no escribir instrucciones más largas o complejas, ret también es una pseudo instrucción que se convierte en `jalr x0, x1, 0`.
+
+Ahora no todo es tan bonito con las pseudo instrucciones hay unas más complejas como li (load immediate), la cual se traduce de varias formas si intentas cargar un valor, aunque parece inútil esta instrucción toma sentido, debido a que es por ejemplo para 32 es una combinación addi (12 bits) + lui (20 bits) para formar un valor de 32 bits.
+
+Por ejemplo, tome la instrucción `li a0,73728` esto se convierte en `lui a0,0x12 addi a0,a0,837`.
+
+## Funciones para codificar instrucciones
+Bueno llego la parte donde apagas el cerebro y copias y pegas, aunque te recomendaría analizar las funciones detenidamente estas funciones están sacadas desde mi Assembly y retornar un `Vec<u8>` que contiene la instrucción de RISC-V codificada en Little endian actualmente solo llevo los tipos I e R
+
+## Tipo I
+```rust
+pub struct ImmArgs {
+    pub imm: u64,
+    pub rs1: u32,
+    pub rd: u32,
+    pub opcode: u32,
+}
+
+pub fn immediate(arg: ImmArgs) -> Vec<u8> {
+    let ins = ((arg.imm as u32) << 20)
+        | (arg.rs1 as u32) << 15
+        | 0x0_u32 << 12 // funct3
+        | (arg.rd as u32) << 7
+        | arg.opcode;
+
+    ins.to_le_bytes().to_vec()
+}
+```
+
+## Tipo R
+```rust
+pub struct RegArgs {
+    pub rs1: u32,
+    pub rs2: u32,
+    pub rd: u32,
+    pub funct7: u32,
+    pub funct3: u32,
+    pub opcode: u32,
+}
+
+pub fn register(arg: RegArgs) -> Vec<u8> {
+    let ins = arg.funct7 << 25
+        | arg.rs2 << 20
+        | arg.rs1 << 15
+        | arg.funct3 << 12
+        | arg.rd << 7
+        | arg.opcode;
+
+    ins.to_le_bytes().to_vec()
+}
+```
 
 
 # Recursos
