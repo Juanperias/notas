@@ -22,7 +22,7 @@ Ahora si hace más sentido, pero como se supone que esto tiene que ser una expli
 
 Empecemos por lo más sencillo: el opcode, opcode es simplemente la keyword  de la instrucción, pero en binario, es útil la abstracción que proporcionan los assemblers usando palabras y no código binario. Imagínate recordar cómo se escribía addi en binario.
 
-Cuando pones addi esto se traduce al opcode 0010011, una cosa importante es que todos los opcodes son diferentes, no hay algo como dos opcodes iguales, por si alguno se preguntaba.
+Cuando pones addi esto se traduce al opcode 0010011, algo es que algunas instrucciones tienen mismos opcodes (ejemplo addi y xori) pero tienen diferentes funct3 o en formatos que permitan funct7 aveces tambien tienen diferente funct7 y funct3 (en casos como addi y ecall tienen el mismo funct3 pero no el mismo opcode).
 
 Después le sigue rd que es el registro de destino cuando haces un `addi a0, a1, 2` es como hacer a0 = a1 + 2, lo cual explica por qué cuando se quiere asignar un valor a un registro se usa el registro zero que siempre es cero.
 
@@ -65,13 +65,14 @@ pub struct ImmArgs {
     pub imm: u64,
     pub rs1: u32,
     pub rd: u32,
+    pub funct3: u32,
     pub opcode: u32,
 }
 
 pub fn immediate(arg: ImmArgs) -> Vec<u8> {
     let ins = ((arg.imm as u32) << 20)
-        | (arg.rs1 as u32) << 15
-        | 0x0_u32 << 12 // funct3
+        | arg.rs1 << 15
+        | arg.funct3 << 12
         | (arg.rd as u32) << 7
         | arg.opcode;
 
