@@ -2,7 +2,7 @@
 
 ## Abstracto 
 
-PEIQS (**P**rocess **E**xecution **I**s **\*\*Q\*\*uantum \*\*S\*\*election**) , es un algoritmo sencillo el cual se basa en una serie de comportamientos de un proceso para determinar su Quantum.
+PEIQS (**P**rocess **E**xecution **I**s **Q**uantum **S**election) , es un algoritmo sencillo el cual se basa en una serie de comportamientos de un proceso para determinar su Quantum.
 
 Dentro de este documento se verán los problemas que se han planteado y una posible solución.
 
